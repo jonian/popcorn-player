@@ -4,6 +4,7 @@ import libtorrent
 gi.require_version('Gio', '2.0')
 
 from gi.repository import Gio
+from helpers.utils import user_data_dir
 
 session = libtorrent.session()
 session.listen_on(6881, 6891)
@@ -41,7 +42,8 @@ class Torrent(object):
     return info
 
   def set_params(self):
+    folder = "%s/torrents" % user_data_dir()
     store  = libtorrent.storage_mode_t.storage_mode_sparse
-    params = { 'save_path': '.', 'storage_mode': store, 'ti': self.info }
+    params = { 'save_path': folder, 'storage_mode': store, 'ti': self.info }
 
     return params
