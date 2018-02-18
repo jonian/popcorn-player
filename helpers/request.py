@@ -41,12 +41,6 @@ class Request(object):
     for key, value in self.HEADERS.items():
       message.request_headers.append(key, value)
 
-  def _request(self, request_type, url, params={}):
-    url  = self._get_uri(url, params)
-    data = self._send_message(request_type, url)
-
-    return self._parse_response(data)
-
   def _parse_response(self, text):
     data = self._to_json(text) if self.JSON_API else text
     return data
@@ -63,8 +57,14 @@ class Request(object):
 
     return data
 
+  def request(self, request_type, url, params={}):
+    url  = self._get_uri(url, params)
+    data = self._send_message(request_type, url)
+
+    return self._parse_response(data)
+
   def get(self, url, params={}):
-    return self._request('GET', url, params)
+    return self.request('GET', url, params)
 
   def post(self, url, params={}):
-    return self._request('POST', url, params)
+    return self.request('POST', url, params)
