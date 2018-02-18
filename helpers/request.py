@@ -13,8 +13,9 @@ session.add_feature(caching)
 
 class Request(object):
 
-  def __init__(self):
-    self.base_url = None
+  json_api   = True
+  base_url   = None
+  user_agent = 'Soup/2.4 (PopcornPlayer/0.1; https://github.com/jonian/popcorn-player)'
 
   def uri(self, url_string, params={}):
     tup = (self.base_url, url_string)
@@ -28,6 +29,7 @@ class Request(object):
 
   def message(self, message_type, uri):
     message = Soup.Message.new_from_uri(message_type, uri)
+    message.request_headers.append('user-agent', self.user_agent)
     session.send_message(message)
 
     return message.response_body.data
@@ -36,7 +38,7 @@ class Request(object):
     url  = self.uri(url, params)
     data = self.message(request_type, url)
 
-    return self.to_json(data)
+    return self.parse_response(data)
 
   def get(self, url, params={}):
     return self.request('GET', url, params)
@@ -44,14 +46,18 @@ class Request(object):
   def post(self, url, params={}):
     return self.request('POST', url, params)
 
+  def parse_response(self, text):
+    data = self.to_json(text) if self.json_api else text
+    return data
+
   def to_json(self, text):
     data = {}
     html = re.compile('<.*>')
     text = re.sub(html, '', text)
 
     try:
-      data = json.loads(text)
+      data = json.loads(text) if text else data
     except JSONDecodeError as error:
-      print(error)
+      print('JSON Decode Error', error)
 
     return data

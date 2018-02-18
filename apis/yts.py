@@ -2,8 +2,7 @@ from helpers.request import Request
 
 class Yts(Request):
 
-  def __init__(self):
-    self.base_url = 'https://yts.am/api/v2'
+  base_url = 'https://yts.am/api/v2'
 
   def movies(self, **params):
     return self.get('list_movies.json', params)
