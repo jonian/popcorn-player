@@ -11,7 +11,8 @@ session.listen_on(6881, 6891)
 
 class Torrent(object):
 
-  handlers = []
+  def __init__(self):
+    self.handlers = []
 
   def from_url(self, url):
     stream = Gio.File.new_for_uri(url)
