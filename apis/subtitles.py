@@ -2,7 +2,7 @@ from helpers.request import Request
 
 class Subtitles(Request):
 
-  base_url = 'https://subtitle-api.org'
+  BASE_URL = 'https://subtitle-api.org'
 
   def video(self, imdb_id):
     return self.get('videos/%s' % imdb_id)

@@ -2,7 +2,7 @@ from helpers.request import Request
 
 class Yts(Request):
 
-  base_url = 'https://yts.am/api/v2'
+  BASE_URL = 'https://yts.am/api/v2'
 
   def search(self, term, **params):
     params['query_term'] = term

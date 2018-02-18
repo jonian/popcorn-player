@@ -13,13 +13,13 @@ session.add_feature(caching)
 
 class Request(object):
 
-  base_url = None
-  json_api = True
-  headers  = {}
+  BASE_URL = None
+  HEADERS  = {}
+  JSON_API = True
 
   def uri(self, url_string, params={}):
-    tup = (self.base_url, url_string)
-    url = "%s/%s" % tup if self.base_url else url_string
+    tup = (self.BASE_URL, url_string)
+    url = "%s/%s" % tup if self.BASE_URL else url_string
     uri = Soup.URI.new(url)
 
     params = dict([(k, str(v)) for k, v in params.items()])
@@ -35,12 +35,10 @@ class Request(object):
     return message.response_body.data
 
   def message_headers(self, message):
-    headers = self.headers
+    if self.JSON_API:
+      self.HEADERS['accept'] = self.HEADERS.get('accept', 'application/json')
 
-    if self.json_api:
-      headers['accept'] = 'application/json'
-
-    for key, value in headers.items():
+    for key, value in self.HEADERS.items():
       message.request_headers.append(key, value)
 
   def request(self, request_type, url, params={}):
@@ -56,13 +54,13 @@ class Request(object):
     return self.request('POST', url, params)
 
   def parse_response(self, text):
-    data = self.to_json(text) if self.json_api else text
+    data = self.to_json(text) if self.JSON_API else text
     return data
 
   def to_json(self, text):
     data = {}
     html = re.compile('<.*>')
-    text = re.sub(html, '', text)
+    text = re.sub(html, '', str(text))
 
     try:
       data = json.loads(text) if text else data
