@@ -47,12 +47,6 @@ class Request(object):
 
     return self._parse_response(data)
 
-  def get(self, url, params={}):
-    return self._request('GET', url, params)
-
-  def post(self, url, params={}):
-    return self._request('POST', url, params)
-
   def _parse_response(self, text):
     data = self._to_json(text) if self.JSON_API else text
     return data
@@ -68,3 +62,9 @@ class Request(object):
       print('JSON Decode Error', error)
 
     return data
+
+  def get(self, url, params={}):
+    return self._request('GET', url, params)
+
+  def post(self, url, params={}):
+    return self._request('POST', url, params)
