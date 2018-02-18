@@ -13,6 +13,10 @@ class Tmdb(Request):
     params['external_source'] = 'imdb_id'
     return self.get('find/%s' % imdb_id, params)
 
+  def search(self, model, term, **params):
+    params['query'] = term
+    return self.get('search/%s' % model, params)
+
   def movies(self, sort='popular', **params):
     return self.get('movie/%s' % sort, params)
 
