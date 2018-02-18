@@ -4,5 +4,8 @@ class Eztv(Request):
 
   base_url = 'https://eztv.ag/api'
 
-  def torrents(self):
-    return self.get('get-torrents')
+  def tvshow(self, imdb_id):
+    return self.torrents(imdb_id=imdb_id)
+
+  def torrents(self, **params):
+    return self.get('get-torrents', params)
