@@ -17,7 +17,7 @@ class Request(object):
   HEADERS  = {}
   JSON_API = True
 
-  def uri(self, url_string, params={}):
+  def _get_uri(self, url_string, params={}):
     tup = (self.BASE_URL, url_string)
     url = "%s/%s" % tup if self.BASE_URL else url_string
     uri = Soup.URI.new(url)
@@ -27,37 +27,37 @@ class Request(object):
 
     return uri
 
-  def message(self, message_type, uri):
+  def _send_message(self, message_type, uri):
     message = Soup.Message.new_from_uri(message_type, uri)
-    self.message_headers(message)
+    self._message_headers(message)
     session.send_message(message)
 
     return message.response_body.data
 
-  def message_headers(self, message):
+  def _message_headers(self, message):
     if self.JSON_API:
       self.HEADERS['accept'] = self.HEADERS.get('accept', 'application/json')
 
     for key, value in self.HEADERS.items():
       message.request_headers.append(key, value)
 
-  def request(self, request_type, url, params={}):
-    url  = self.uri(url, params)
-    data = self.message(request_type, url)
+  def _request(self, request_type, url, params={}):
+    url  = self._get_uri(url, params)
+    data = self._send_message(request_type, url)
 
-    return self.parse_response(data)
+    return self._parse_response(data)
 
   def get(self, url, params={}):
-    return self.request('GET', url, params)
+    return self._request('GET', url, params)
 
   def post(self, url, params={}):
-    return self.request('POST', url, params)
+    return self._request('POST', url, params)
 
-  def parse_response(self, text):
-    data = self.to_json(text) if self.JSON_API else text
+  def _parse_response(self, text):
+    data = self._to_json(text) if self.JSON_API else text
     return data
 
-  def to_json(self, text):
+  def _to_json(self, text):
     data = {}
     html = re.compile('<.*>')
     text = re.sub(html, '', str(text))
