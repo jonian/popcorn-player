@@ -24,3 +24,10 @@ def database_dir(db_name):
     open(db_dir, 'w+')
 
   return db_dir
+
+
+def merge_dicts(first, second):
+  merged = first.copy()
+  merged.update(second)
+
+  return merged

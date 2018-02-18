@@ -6,6 +6,7 @@ gi.require_version('Soup', '2.4')
 
 from gi.repository import Soup
 from json.decoder import JSONDecodeError
+from helpers.utils import merge_dicts
 
 caching = Soup.Cache.new(None, Soup.CacheType.SHARED)
 session = Soup.Session.new()
@@ -15,15 +16,25 @@ class Request(object):
 
   BASE_URL = None
   HEADERS  = {}
+  PARAMS   = {}
   JSON_API = True
 
-  def _get_uri(self, url_string, params={}):
-    tup = (self.BASE_URL, url_string)
-    url = "%s/%s" % tup if self.BASE_URL else url_string
-    uri = Soup.URI.new(url)
+  def _get_url(self, url_string):
+    if self.BASE_URL:
+      url_string = "%s/%s" % (self.BASE_URL, url_string)
 
+    return url_string
+
+  def _set_params(self, uri, params={}):
+    params = merge_dicts(self.PARAMS, params)
     params = dict([(k, str(v)) for k, v in params.items()])
+
     uri.set_query_from_form(params)
+
+  def _get_uri(self, url, params={}):
+    url = self._get_url(url)
+    uri = Soup.URI.new(url)
+    self._set_params(uri, params)
 
     return uri
 
