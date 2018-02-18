@@ -18,29 +18,29 @@ class Torrent(object):
     stream = Gio.File.new_for_uri(url)
     result = list(stream.load_contents())[1]
 
-    self.add_torrent(result)
+    self._add_torrent(result)
 
   def from_path(self, path):
     stream = Gio.File.new_for_path(path)
     result = list(stream.load_contents())[1]
 
-    self.add_torrent(result)
+    self._add_torrent(result)
 
-  def add_torrent(self, data):
-    info    = self.get_info(data)
-    params  = self.get_params(info)
+  def _add_torrent(self, data):
+    info    = self._get_info(data)
+    params  = self._get_params(info)
     handler = session.add_torrent(params)
 
     handler.set_sequential_download(True)
     self.handlers.append(handler)
 
-  def get_info(self, data):
+  def _get_info(self, data):
     data = libtorrent.bdecode(data)
     info = libtorrent.torrent_info(data)
 
     return info
 
-  def get_params(self, info):
+  def _get_params(self, info):
     folder = "%s/torrents" % user_data_dir()
     store  = libtorrent.storage_mode_t.storage_mode_sparse
     params = { 'save_path': folder, 'storage_mode': store, 'ti': info }
