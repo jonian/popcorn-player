@@ -8,7 +8,7 @@ class TvShow(Model):
   @classmethod
 
   def search(self, term):
-    data = tmdb_api.search(term)
+    data = tmdb_api.search('tv', term)
     data = [TvShow(item) for item in data['results']]
 
     return data

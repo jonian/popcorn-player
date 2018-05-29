@@ -7,6 +7,7 @@ API_KEY = os.environ.get('TMDB_API_KEY')
 class Tmdb(Request):
 
   BASE_URL = 'https://api.themoviedb.org/3'
+  IMG_URL  = 'https://image.tmdb.org/t/p'
   PARAMS   = { 'api_key': API_KEY }
 
   def find(self, imdb_id, **params):
@@ -16,6 +17,9 @@ class Tmdb(Request):
   def search(self, model, term, **params):
     params['query'] = term
     return self.get('search/%s' % model, params)
+
+  def external_ids(self, model, model_id, **params):
+    return self.get('%s/%s/external_ids' % (model, model_id), params)
 
   def movies(self, sort='popular', **params):
     return self.get('movie/%s' % sort, params)
