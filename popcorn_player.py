@@ -38,6 +38,18 @@ class PopcornPlayer(object):
   def on_window_main_destroy(self, _event):
     self.quit()
 
+  def on_window_main_key_release_event(self, *_args):
+    pass
+
+  def on_header_button_reload_clicked(self, *_args):
+    pass
+
+  def on_header_button_back_clicked(self, *_args):
+    pass
+
+  def on_stack_main_visible_child_notify(self, *_args):
+    pass
+
 
 if __name__ == '__main__':
   signal.signal(signal.SIGINT, signal.SIG_DFL)
