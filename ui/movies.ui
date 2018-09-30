@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <!-- interface-css-provider-path styles.css -->
-  <object class="GtkBox" id="box_matches">
+  <object class="GtkBox" id="box_movies">
     <property name="width_request">980</property>
     <property name="height_request">585</property>
     <property name="visible">True</property>
@@ -19,10 +19,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkListBox" id="list_box_matches_filters">
+              <object class="GtkListBox" id="list_box_movies_filters">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <signal name="row-activated" handler="on_list_box_matches_filters_row_activated" swapped="no"/>
+                <signal name="row-activated" handler="on_list_box_movies_filters_row_activated" swapped="no"/>
               </object>
             </child>
           </object>
@@ -49,7 +49,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkFlowBox" id="flow_box_matches_list">
+              <object class="GtkFlowBox" id="flow_box_movies_list">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
